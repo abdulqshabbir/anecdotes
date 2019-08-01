@@ -1,6 +1,6 @@
 import React from 'react'
 import { createNewAnecdoteAction } from '../reducers/anecdoteReducer'
-import { getId } from '../helperFunctions/generateInitialState'
+import { getId } from '../helperFunctions/generateId'
 import { connect } from 'react-redux'
 
 const NewAnecdoteForm = ({ createAnecdote }) => {

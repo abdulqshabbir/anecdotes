@@ -1,13 +1,11 @@
-import { store } from '../index'
-
 const message = 'Here is a message from the notification component!  Watch it disappear...'
 
 export const showNotification = () => {
-    store.dispatch({ type: 'VISIBLE'})
+    return { type: 'VISIBLE'}
 }
 
 export const hideNotification = () => {
-    store.dispatch({ type: 'HIDDEN' })
+    return { type: 'HIDDEN' }
 }
 
 const notificationVisibilityReducer = (state = message, action) => {

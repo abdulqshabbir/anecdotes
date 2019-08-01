@@ -1,9 +1,11 @@
-import intitialState from './../helperFunctions/generateInitialState'
 import { store } from './../index'
 //------------------ Action Creators -------------------------//
 
 export const createVoteAction = (id) => {
-  store.dispatch({ type: 'VOTE', id: id })
+  return { 
+    type: 'VOTE',
+    id: id
+  }
 }
 
 export const createNewAnecdoteAction = (anecdote) => {
@@ -12,8 +14,10 @@ export const createNewAnecdoteAction = (anecdote) => {
 
 //---------------------- Reducer  -------------------------//
 
-const anecdoteReducer = (state = intitialState, action) => {
+const anecdoteReducer = (state = [], action) => {
   switch (action.type) {
+    case 'INIT_ANECDOTES':
+      return action.payload
     case 'VOTE':
       const anecdoteToUpdate = state.find(a => a.id === action.id)
       const updatedObject = {
