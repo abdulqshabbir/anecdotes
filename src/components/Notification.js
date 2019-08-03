@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-const Notification = ({ notificationVisibility }) => {
+const Notification = ({ notification }) => {
   const style = {
     border: 'solid',
     padding: 10,
     borderWidth: 1
   }
-  if (notificationVisibility === true) {
+  if (notification.isVisible === true) { 
     return (
       <div style={style}>
         Something
@@ -21,7 +21,7 @@ const Notification = ({ notificationVisibility }) => {
 
 const mapStateToProps = (state) => {
   return {
-    notificationVisibility: state.notificationVisibility
+    notification: state.notificationVisibility
   }
 }
 
