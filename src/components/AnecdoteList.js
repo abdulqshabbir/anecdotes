@@ -1,21 +1,31 @@
-import React from 'react'
-import { createVoteAction } from './../reducers/anecdoteReducer'
-import { showNotification, hideNotification } from './../reducers/notificationVisibilityReducer'
+import React, {useEffect} from 'react'
+import { incrementVote } from './../reducers/anecdoteReducer'
+import { showAndRemoveNotification } from './../reducers/notificationVisibilityReducer'
 import { connect } from 'react-redux'
-const AnecdoteList = ({ anecdotes, createVote, showNotification, hideNotification}) => {
-  const handleVote = (id) => {
-    createVote(id)
-    showNotification()
-    setTimeout(() => {
-      hideNotification()
-    }, 5000)
+import { initializeAnecdotes } from './../reducers/anecdoteReducer'
+
+const AnecdoteList = (props) => {
+  const { 
+          anecdotes, 
+          incrementVote, 
+          showAndRemoveNotification,
+          initializeAnecdotes
+        } = props
+
+  useEffect(() => {
+    initializeAnecdotes()
+  }, [initializeAnecdotes])
+  
+  const handleVote = (anecdote) => {
+    incrementVote(anecdote)
+    showAndRemoveNotification(`${anecdote.content} was just voted for!`)
   }
   return(
     anecdotes
       .map(anecdote => (
         <div key={anecdote.id}>
           <div> {anecdote.content} # of votes: {anecdote.votes} </div>
-          <button onClick={() => handleVote(anecdote.id)}> vote </button>
+          <button onClick={() => handleVote(anecdote)}> vote </button>
         </div>
       ))
   )
@@ -39,15 +49,14 @@ const mapStateToProps = (state) => {
       .sort(sortAnecdotes)
 
   return {
-    anecdotes: anecdotesToShow,
-    query: state.query
+    anecdotes: anecdotesToShow
   }
 }
 
 const mapDispatchToProps = {
-  createVote: createVoteAction,
-  showNotification,
-  hideNotification
+  initializeAnecdotes,
+  incrementVote,
+  showAndRemoveNotification
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)

@@ -1,21 +1,23 @@
 import React from 'react'
-import { createNewAnecdoteAction } from '../reducers/anecdoteReducer'
+import { createAnecdote } from '../reducers/anecdoteReducer'
 import { getId } from '../helperFunctions/generateId'
 import { connect } from 'react-redux'
 
-const NewAnecdoteForm = ({ createAnecdote }) => {
-    const handleNoteCreation = (e) => {
-        e.preventDefault()
-        const newNote = {
-          content: e.target.note.value,
-          votes: 0,
-          id: getId()
-        }
-        createAnecdote(newNote)
-      }
 
+
+const NewAnecdoteForm = ({ createAnecdote }) => {
+    const getAnecdoteOnFormSubmit = (e) =>  {
+      e.preventDefault()
+      const newNote = {
+        content: e.target.note.value,
+        votes: 0,
+        id: getId()
+      }
+      e.target.note.value = ''
+      createAnecdote(newNote)
+    }
     return(
-        <form onSubmit={handleNoteCreation}>
+        <form onSubmit={ getAnecdoteOnFormSubmit }>
             <div>
             <input name="note" />
             <button type='submit'>create note</button>
@@ -24,10 +26,8 @@ const NewAnecdoteForm = ({ createAnecdote }) => {
     )
 }
 
-const mapDispatchToProps = () => {
-  return {
-    createAnecdote: createNewAnecdoteAction
-  }
+const mapDispatchToProps = {
+  createAnecdote
 }
 
 export default connect(null, mapDispatchToProps)(NewAnecdoteForm)

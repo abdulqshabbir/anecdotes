@@ -1,15 +1,35 @@
-import { store } from './../index'
+import noteService from './../services/notes'
+
 //------------------ Action Creators -------------------------//
 
-export const createVoteAction = (id) => {
-  return { 
-    type: 'VOTE',
-    id: id
+export const incrementVote = (anecdote) => {
+  return async dispatch => {
+    await noteService.incrementVote(anecdote)
+    dispatch({ 
+      type: 'INCREMENT_VOTE',
+      id: anecdote.id
+    })
   }
 }
 
-export const createNewAnecdoteAction = (anecdote) => {
-  store.dispatch({ type: 'NEW_ANECDOTE', payload: anecdote })
+export function initializeAnecdotes() {
+  return async dispatch => {
+    const notes = await noteService.getAllNotes()
+    dispatch({
+      type: 'INIT_ANECDOTES',
+      payload: notes
+    })
+  }
+}
+
+export const createAnecdote = (newAnecdote) => {
+  return async dispatch => {
+    const anecdote = await noteService.createNote(newAnecdote)
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      payload: anecdote
+    })
+  }
 }
 
 //---------------------- Reducer  -------------------------//
@@ -18,7 +38,11 @@ const anecdoteReducer = (state = [], action) => {
   switch (action.type) {
     case 'INIT_ANECDOTES':
       return action.payload
-    case 'VOTE':
+
+    case 'NEW_ANECDOTE':
+      return [...state, action.payload]
+
+    case 'INCREMENT_VOTE':
       const anecdoteToUpdate = state.find(a => a.id === action.id)
       const updatedObject = {
         ...anecdoteToUpdate,
@@ -30,10 +54,7 @@ const anecdoteReducer = (state = [], action) => {
         }
         return a
       })
-
-    case 'NEW_ANECDOTE':
-     return [...state, action.payload]
-     
+      
     default:
       return state
   }

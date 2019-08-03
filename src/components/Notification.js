@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 const Notification = ({ notificationVisibility }) => {
-  console.log('current notification visibility', notificationVisibility)
   const style = {
     border: 'solid',
     padding: 10,
